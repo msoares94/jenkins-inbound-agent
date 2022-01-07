@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source hooks/env
+
+BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+VCS_URL="https://github.com/marcosoliveirasoares94/jenkins-inbound-agent"
+
+docker build \
+	--build-arg BUILD_DATE="$BUILD_DATE" \
+	--build-arg VCS_REF="$GIT_SHA1" \
+	--build-arg VCS_URL="$VCS_URL" \
+	--build-arg VERSION="$GIT_SHA1" \
+	-t "$IMAGE_NAME" .
+
+docker push $IMAGE_NAME
