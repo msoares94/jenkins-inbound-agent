@@ -34,17 +34,6 @@ ENV JAVA_OPTS -XX:-UsePerfData
 # apk and kaniko must be run as root.
 USER root
 
-# Install minimally required packages
-RUN apk add --no-cache --update \
-      build-base \
-      make
-
-# Install additional packages
-RUN apk add --update --no-cache \
-      jq \
-      curl \
-      python3
-
 # The /kaniko directory is whitelisted by default. Its contents are not de-
 # leted between stages, nor is it included in the final Docker image.
 COPY --from=kaniko /kaniko /kaniko
@@ -59,6 +48,33 @@ ENV PATH=/busybox:$PATH
 VOLUME /busybox
 
 ENV DOCKER_CONFIG=/kaniko/.docker
+
+# Install minimally required packages
+RUN apk add --no-cache --update \
+      build-base \
+      make
+
+# Install additional packages
+RUN apk add --update --no-cache \
+      jq \
+      curl \
+      python3
+
+# Install envsubst command for replacing config files in system startup
+# - it needs libintl package
+# - only weights 100KB combined with it's libraries
+RUN apk add --update --no-cache \
+      gettext \
+      libintl && \
+      mv /usr/bin/envsubst /usr/local/bin/envsubst
+
+# install the AWS CLI using the bundled installer
+RUN curl 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip' \
+      -o 'awscli-bundle.zip' && \
+      unzip awscli-bundle.zip && \
+      python3 ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
+      rm -rf awscli-bundle*
+
 ENV AGENT_WORKDIR=/home/jenkins/agent
 
 WORKDIR /home/jenkins/
