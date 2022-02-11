@@ -6,6 +6,9 @@ USER root
 
 # Install additional packages
 RUN apk add --update --no-cache \
+    ca-certificates \
+    less \
+    ncurses-terminfo-base \
     bash \
     icu-libs \
     krb5-libs \
@@ -13,14 +16,17 @@ RUN apk add --update --no-cache \
     libintl \
     libssl1.1 \
     libstdc++ \
-    zlib
+    zlib \
+    tzdata \
+    userspace-rcu
 
 # Install additional package libgdiplus
 RUN apk add --update --no-cache libgdiplus --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN apk add --update --no-cache lttng-ust --repository https://dl-cdn.alpinelinux.org/alpine/edge/main
 
+# Install additional package dotnet
 RUN mkdir -p /usr/share/dotnet \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet 
-
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 RUN wget https://dot.net/v1/dotnet-install.sh
 RUN chmod +x dotnet-install.sh
 RUN ./dotnet-install.sh -c 5.0 --install-dir /usr/share/dotnet

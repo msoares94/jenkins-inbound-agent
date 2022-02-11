@@ -58,7 +58,8 @@ RUN apk add --no-cache --update \
 RUN apk add --update --no-cache \
       jq \
       curl \
-      python3
+      python3 \
+      libxml2-utils
 
 # Install envsubst command for replacing config files in system startup
 # - it needs libintl package
