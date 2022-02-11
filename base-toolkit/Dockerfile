@@ -50,12 +50,12 @@ VOLUME /busybox
 ENV DOCKER_CONFIG=/kaniko/.docker
 
 # Install minimally required packages
-RUN apk add --no-cache --update \
+RUN apk add --update \
       build-base \
       make
 
 # Install additional packages
-RUN apk add --update --no-cache \
+RUN apk add --update \
       jq \
       curl \
       python3 \
@@ -64,7 +64,7 @@ RUN apk add --update --no-cache \
 # Install envsubst command for replacing config files in system startup
 # - it needs libintl package
 # - only weights 100KB combined with it's libraries
-RUN apk add --update --no-cache \
+RUN apk add --update \
       gettext \
       libintl && \
       mv /usr/bin/envsubst /usr/local/bin/envsubst

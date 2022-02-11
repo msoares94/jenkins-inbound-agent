@@ -12,6 +12,6 @@ ENV M2_HOME=/usr/share/java/maven-3
 ENV PATH=$PATH:$M2_HOME/bin
 
 # Install additional packages
-RUN apk add --update --no-cache \
+RUN apk add --update \
     maven \
     openjdk11

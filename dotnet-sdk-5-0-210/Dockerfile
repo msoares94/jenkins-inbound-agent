@@ -5,7 +5,7 @@ LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>"
 USER root
 
 # Install additional packages
-RUN apk add --update --no-cache \
+RUN apk add --update \
     ca-certificates \
     less \
     ncurses-terminfo-base \
@@ -21,8 +21,8 @@ RUN apk add --update --no-cache \
     userspace-rcu
 
 # Install additional package libgdiplus
-RUN apk add --update --no-cache libgdiplus --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
-RUN apk add --update --no-cache lttng-ust --repository https://dl-cdn.alpinelinux.org/alpine/edge/main
+RUN apk add --update libgdiplus --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN apk add --update lttng-ust --repository https://dl-cdn.alpinelinux.org/alpine/edge/main
 
 # Install additional package dotnet
 RUN mkdir -p /usr/share/dotnet \
