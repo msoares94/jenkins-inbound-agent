@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+# These are normally passed by Docker Hub, 
+# but if running locally we populate them ourselves.
+#: "${GIT_SHA1:=$(git rev-parse -q HEAD)}"
+: "${DOCKER_REPO:=marcosoliveirasoares94/jenkins-inbound-agent}"
+#: "${IMAGE_NAME:=${DOCKER_REPO}:${GIT_SHA1}-SNAPSHOT}"
+: "${IMAGE_NAME:=${DOCKER_REPO}:node16.14.0}"

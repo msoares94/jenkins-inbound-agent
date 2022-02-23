@@ -5,4 +5,4 @@
 #: "${GIT_SHA1:=$(git rev-parse -q HEAD)}"
 : "${DOCKER_REPO:=marcosoliveirasoares94/jenkins-inbound-agent}"
 #: "${IMAGE_NAME:=${DOCKER_REPO}:${GIT_SHA1}-SNAPSHOT}"
-: "${IMAGE_NAME:=${DOCKER_REPO}:dotnet-sdk-5-0-210}"
+: "${IMAGE_NAME:=${DOCKER_REPO}:maven3-openjdk11}"
