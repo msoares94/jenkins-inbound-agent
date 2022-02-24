@@ -12,3 +12,5 @@ COPY --from=node /usr/local/bin /usr/local/bin
 LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>"
 
 USER root
+
+RUN apk --no-cache add yarn --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community
