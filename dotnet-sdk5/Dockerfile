@@ -30,3 +30,5 @@ RUN mkdir -p /usr/share/dotnet \
 RUN wget https://dot.net/v1/dotnet-install.sh
 RUN chmod +x dotnet-install.sh
 RUN ./dotnet-install.sh -c 5.0 --install-dir /usr/share/dotnet
+
+RUN dotnet tool install --tool-path /bin dotnet-sonarscanner
