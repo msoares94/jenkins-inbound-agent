@@ -29,25 +29,13 @@ ENV JNLP_PROTOCOL_OPTS=-Dorg.jenkinsci.remoting.engine.JnlpProtocol3.disabled=fa
 # apk and kaniko must be run as root.
 USER root
 
-# The /kaniko directory is whitelisted by default. Its contents are not de-
-# leted between stages, nor is it included in the final Docker image.
-COPY --from=kaniko /kaniko /kaniko
-COPY --from=busybox /bin /busybox
-
-ENV PATH=/busybox:$PATH
-
-# Docker volumes include an entry in /proc/self/mountinfo. This file is used
-# when kaniko builds the list of whitelisted directories. Whitelisted
-# directories are persisted between stages and are not included in the final
-# Docker image.
-VOLUME /busybox
-
 # Install minimally required packages
 RUN apk add --update \
       build-base \
       make \
       # Install additional packages
       jq \
+      wget \
       curl \
       python3 \
       libxml2-utils \
@@ -57,6 +45,10 @@ RUN apk add --update \
       gettext \
       libintl && \
       mv /usr/bin/envsubst /usr/local/bin/envsubst && \
+      # install the JQ
+      #wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+      #mv jq-linux64 /usr/local/bin/jq && \
+      #chmod +x /usr/local/bin/jq && \
       # install the AWS CLI using the bundled installer
       curl 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip' -o 'awscli-bundle.zip' && \
       unzip awscli-bundle.zip && \
@@ -70,6 +62,13 @@ RUN \
     rm /opt/sonar-scanner.zip && \
     sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner && \
     ln -s /opt/sonar-scanner-${SONAR_SCANNER_VERSION}/bin/sonar-scanner /usr/bin/sonar-scanner
+
+# The /kaniko directory is whitelisted by default. Its contents are not de-
+# leted between stages, nor is it included in the final Docker image.
+COPY --from=kaniko /kaniko /kaniko
+COPY --from=busybox /bin /busybox
+
+ENV PATH=$PATH:/usr/local/bin:/kaniko:/busybox
 
 ENV AGENT_WORKDIR=/home/jenkins/agent \
       DOCKER_CONFIG=/kaniko/.docker
