@@ -15,3 +15,9 @@ ENV PATH=$PATH:$M2_HOME/bin
 RUN apk add --update \
     maven \
     openjdk11
+
+LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>" \
+  org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.vcs-url=$VCS_URL \
+  org.label-schema.version=$VERSION

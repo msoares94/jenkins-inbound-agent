@@ -32,3 +32,9 @@ RUN chmod +x dotnet-install.sh
 RUN ./dotnet-install.sh -c 5.0 --install-dir /usr/share/dotnet
 
 RUN dotnet tool install --tool-path /bin dotnet-sonarscanner
+
+LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>" \
+  org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.vcs-url=$VCS_URL \
+  org.label-schema.version=$VERSION

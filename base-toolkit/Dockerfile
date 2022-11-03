@@ -7,12 +7,6 @@ ARG VCS_REF
 ARG VCS_URL
 ARG VERSION
 
-LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>" \
-  org.label-schema.build-date=$BUILD_DATE \
-  org.label-schema.vcs-ref=$VCS_REF \
-  org.label-schema.vcs-url=$VCS_URL \
-  org.label-schema.version=$VERSION
-
 # By default, the JNLP3-connect protocol is disabled due to known stability
 # and scalability issues. You can enable this protocol using the
 # JNLP_PROTOCOL_OPTS environment variable:
@@ -31,13 +25,12 @@ USER root
 
 # Install minimally required packages
 RUN apk add --update \
-      build-base \
-      make \
-      # Install additional packages
       jq \
+      make \
       wget \
       curl \
       python3 \
+      build-base \
       libxml2-utils \
       # Install envsubst command for replacing config files in system startup
       # - it needs libintl package
@@ -74,3 +67,9 @@ ENV AGENT_WORKDIR=/home/jenkins/agent \
       DOCKER_CONFIG=/kaniko/.docker
 
 WORKDIR /home/jenkins/
+
+LABEL maintainer="Marcos Oliveira Soares <marcosoliveirasoares94@gmail.com>" \
+  org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.vcs-ref=$VCS_REF \
+  org.label-schema.vcs-url=$VCS_URL \
+  org.label-schema.version=$VERSION
