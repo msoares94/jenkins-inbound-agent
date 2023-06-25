@@ -1,4 +1,4 @@
-FROM gcr.io/kaniko-project/executor:debug AS kaniko
+FROM gcr.io/kaniko-project/executor:v1.11.0-debug AS kaniko
 FROM busybox:1.31.0 AS busybox
 FROM jenkins/inbound-agent
 
@@ -34,6 +34,7 @@ RUN apt-get update -y && apt-get install -y \
       curl \
       wget \
       make \
+      awscli \
       unzip \
       python3 \
       libjq-dev \
@@ -46,18 +47,8 @@ RUN apt-get update -y && apt-get install -y \
       # - it needs libintl package
       # - only weights 100KB combined with it's libraries
       gettext \
-      libintl-perl
-
-RUN mv /usr/bin/envsubst /usr/local/bin/envsubst && \
-      # install the JQ
-      #wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
-      #mv jq-linux64 /usr/local/bin/jq && \
-      #chmod +x /usr/local/bin/jq && \
-      # install the AWS CLI using the bundled installer
-      curl 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip' -o 'awscli-bundle.zip' && \
-      unzip awscli-bundle.zip && \
-      python3 ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws && \
-      rm -rf awscli-bundle*
+      libintl-perl && \
+      mv /usr/bin/envsubst /usr/local/bin/envsubst
 
 ENV SONAR_SCANNER_VERSION=4.7.0.2747
 RUN \
@@ -71,6 +62,11 @@ RUN \
 # leted between stages, nor is it included in the final Docker image.
 COPY --from=kaniko /kaniko /kaniko
 COPY --from=busybox /bin /busybox
+
+RUN \
+      rm /var/spool/mail && \
+      mv /var/mail /var/spool/mail && \
+      ln -sf spool/mail /var/mail
 
 ENV PATH=$PATH:/usr/local/bin:/kaniko:/busybox
 
